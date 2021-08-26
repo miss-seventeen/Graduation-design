@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambow.dao.FamllyDao">
+  <resultMap id="FamllyMap" type="FamllyInfo">
+    <id property="fid" column="fid"></id>
+    <result property="fname" column="fname"></result>
+    <result property="fpwd" column="fpwd"></result>
+  </resultMap>
+    <select id="byIdFamlly" resultType="FamllyInfo">
+    select * from tb_famlly where fid = #{id}
+  </select>
+    <select id="selectByNameAndPwd" resultType="FamllyInfo">
+    select * from tb_famlly where fid=#{fid} and fpwd=#{fpwd}
+  </select>
+    <select id="selectIsName" resultType="FamllyInfo">
+    select * from tb_famlly where fname=#{fname}
+  </select>
+    <select id="allFamlly" resultType="FamllyInfo">
+    select * from tb_famlly
+  </select>
+    <select id="likeUser" resultType="FamllyInfo">
+    select * from tb_famlly where uname like '_${value}%'
+  </select>
+    <insert id="addFamlly" parameterType="FamllyInfo">
+        insert into tb_famlly values (null,#{fname},#{fpwd})
+    </insert>
+
+    <delete id="delFamlly">
+        delete from tb_famlly where fid=#{id}
+    </delete>
+    <update id="updateFamlly" parameterType="FamllyInfo">
+        update tb_famlly set fname=#{fname},fpwd=#{fpwd} where fid=#{fid}
+    </update>
+    <update id="upPwd">
+      update tb_famlly set fpwd=#{fpwd} where fid=#{fid}
+    </update>
+</mapper>

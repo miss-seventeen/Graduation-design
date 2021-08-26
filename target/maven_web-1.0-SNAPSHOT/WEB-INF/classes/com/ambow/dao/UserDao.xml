@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambow.dao.UserDao">
+  <resultMap id="UserMap" type="UserInfo">
+    <id property="uid" column="uid"></id>
+    <result property="uname" column="uname"></result>
+    <result property="uflag" column="uflag"></result>
+    <result property="upwd" column="upwd"></result>
+    <result property="uimg" column="uimg"></result>
+    <association property="unum" javaType="com.ambow.bean.FamllyInfo">
+      <id property="fid" column="fid"></id>
+      <result property="fname" column="fname"></result>
+      <result property="fpwd" column="fpwd"></result>
+    </association>
+  </resultMap>
+  <select id="byName" resultMap="UserMap">
+    select * from tb_user,tb_famlly where tb_user.unum=tb_famlly.fid and unum=#{unum.fid}
+  </select>
+  <select id="byFlag" resultType="UserInfo">
+    select * from tb_user where unum = #{id}
+  </select>
+    <select id="byIdUser" resultMap="UserMap">
+    select * from tb_user,tb_famlly where tb_user.unum=tb_famlly.fid and uid = #{id}
+  </select>
+    <select id="selectByNameAndPwd" resultMap="UserMap">
+    select * from tb_user,tb_famlly where tb_user.unum=tb_famlly.fid and uname=#{uname} and upwd=#{upwd}
+  </select>
+    <select id="selectIsName" resultType="UserInfo">
+    select * from tb_user where uname=#{uname}
+  </select>
+    <select id="allUser" resultMap="UserMap">
+    select * from tb_user,tb_famlly where tb_user.unum=tb_famlly.fid
+  </select>
+    <select id="likeUser" resultType="UserInfo">
+    select * from tb_user where uname like '_${value}%'
+  </select>
+    <insert id="addUser" parameterType="UserInfo">
+        insert into tb_user values (null,#{uname},#{uflag},#{upwd},#{uimg},#{unum.fid})
+    </insert>
+
+    <delete id="delUser">
+        delete from tb_user where uid=#{id}
+    </delete>
+    <update id="updateUser" parameterType="UserInfo">
+        update tb_user set uname=#{uname},upwd=#{upwd},uimg=#{uimg} where uid=#{uid}
+    </update>
+    <update id="upPwd">
+      update tb_user set upwd=#{upwd} where uid=#{uid}
+    </update>
+</mapper>

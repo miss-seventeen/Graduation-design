@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambow.dao.RecordDao">
+    <resultMap id="RecordMap" type="RecordInfo">
+        <id property="rid" column="rid"></id>
+        <result property="rtime" column="rtime"></result>
+        <result property="money" column="money"></result>
+        <result property="runame" column="runame"></result>
+        <result property="wtime" column="wtime"></result>
+        <result property="beizhu" column="beizhu"></result>
+        <association property="rsid" javaType="com.ambow.bean.SmallInfo">
+            <id property="sid" column="sid"></id>
+            <result property="sname" column="sname"></result>
+            <association property="bsid" javaType="com.ambow.bean.BigInfo">
+                <id property="bid" column="bid"></id>
+                <result property="bname" column="bname"></result>
+                <result property="btype" column="btype"></result>
+            </association>
+        </association>
+        <association property="uid" javaType="com.ambow.bean.UserInfo">
+            <id property="uid" column="uid"></id>
+            <result property="uname" column="uname"></result>
+            <result property="uflag" column="uflag"></result>
+            <result property="upwd" column="upwd"></result>
+            <result property="uimg" column="uimg"></result>
+        </association>
+    </resultMap>
+    <!--select * from tb_record,tb_smail,tb_big,tb_user where tb_record.rsid=tb_smail.sid and tb_smail.bsid=tb_big.bid and tb_record.uid=tb_user.uid and wtime between '2020-11-01' and '2020-11-02'-->
+   <!-- <select id="byTime" resultMap="RecordMap">
+    select * from tb_record,tb_smail,tb_big,tb_user where tb_record.rsid=tb_smail.sid and tb_smail.bsid=tb_big.bid and tb_record.uid=tb_user.uid and tb_record.uid=#{ud} and wtime between #{time} and #{tim} order by rid
+  </select>-->
+    <select id="byIdRecord" resultMap="RecordMap">
+    select * from tb_record,tb_smail,tb_big,tb_user where tb_record.rsid=tb_smail.sid and tb_smail.bsid=tb_big.bid and tb_record.uid=tb_user.uid and rid=#{id}
+  </select>
+    <select id="getAllRecordPage" resultMap="RecordMap">
+    select * from tb_record,tb_smail,tb_big,tb_user where tb_record.rsid=tb_smail.sid and tb_smail.bsid=tb_big.bid and tb_record.uid=tb_user.uid and tb_record.uid=#{number} order by rid  limit #{page},#{yetiao}
+  </select>
+    <select id="getAllRecord" resultMap="RecordMap">
+        select * from tb_record,tb_smail,tb_big,tb_user where tb_record.rsid=tb_smail.sid and tb_smail.bsid=tb_big.bid and tb_record.uid=tb_user.uid order by rid  limit #{page},#{yetiao}
+    </select>
+    <select id="allRecord" resultMap="RecordMap">
+    select * from tb_record,tb_smail,tb_big,tb_user where tb_record.rsid=tb_smail.sid and tb_smail.bsid=tb_big.bid and tb_record.uid=tb_user.uid
+  </select>
+    <select id="byUnumRecord" resultMap="RecordMap">
+    select * from tb_record,tb_smail,tb_big,tb_user where tb_record.rsid=tb_smail.sid and tb_smail.bsid=tb_big.bid and tb_record.uid=tb_user.uid and tb_record.uid=#{uid.uid}
+  </select>
+    <insert id="addRecord" parameterType="RecordInfo">
+        insert into tb_record values (null,#{rsid.sid},#{rtime},#{money},#{runame},#{uid.uid},#{wtime},#{beizhu})
+    </insert>
+
+    <update id="updateRecord" parameterType="RecordInfo">
+        update tb_record set rsid=#{rsid.sid},rtime=#{rtime},money=#{money},runame=#{runame},uid=#{uid.uid},wtime=#{wtime},beizhu=#{beizhu} where rid=#{rid}
+    </update>
+    <delete id="delRecord">
+        delete from tb_record where rid=#{id}
+    </delete>
+    <select id="byTime" resultMap="RecordMap">
+    select * from tb_record,tb_smail,tb_big,tb_user where tb_record.rsid=tb_smail.sid and tb_smail.bsid=tb_big.bid and tb_record.uid=tb_user.uid and tb_record.uid=#{ud} and btype = #{flag}  and wtime between #{time} and #{tim} order by rid
+  </select>
+</mapper>

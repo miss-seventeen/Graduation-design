@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambow.dao.SmallDao">
+    <resultMap id="smallMap" type="SmallInfo">
+         <id property="sid" column="sid"></id>
+         <result property="sname" column="sname"></result>
+        <association property="bsid" javaType="com.ambow.bean.BigInfo">
+            <id property="bid" column="bid"></id>
+            <result property="bname" column="bname"></result>
+            <result property="btype" column="btype"></result>
+        </association>
+    </resultMap>
+    <select id="selectNameAndType" resultMap="smallMap">
+    select * from tb_smail,tb_big where tb_smail.bsid=tb_big.bid and bsid=#{bsid.bid} and sname=#{sname}
+  </select>
+    <select id="getAllSmallByBid" resultMap="smallMap">
+    select * from tb_smail,tb_big where tb_smail.bsid=tb_big.bid and bsid=#{id}
+  </select>
+    <select id="byIdSmall" resultMap="smallMap">
+    select * from tb_smail,tb_big where tb_smail.bsid=tb_big.bid and sid=#{id}
+  </select>
+    <select id="getAllSmallPage" resultMap="smallMap">
+    select * from tb_smail,tb_big where tb_smail.bsid=tb_big.bid order by sid limit #{page},#{yetiao}
+  </select>
+    <select id="allSmall" resultMap="smallMap">
+    select * from tb_smail,tb_big where tb_smail.bsid=tb_big.bid order by sid
+  </select>
+    <insert id="addSmall" parameterType="SmallInfo">
+        insert into tb_smail values (null,#{sname},#{bsid.bid})
+    </insert>
+
+    <delete id="delSmall">
+        delete from tb_smail where sid=#{id}
+    </delete>
+    <update id="updateSmall" parameterType="SmallInfo">
+        update tb_smail set sname=#{sname},bsid=#{bsid.bid} where sid=#{sid}
+    </update>
+</mapper>
